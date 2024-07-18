@@ -37,7 +37,7 @@ file_name = "dump.csv"
 # add = 16bit, numbytes = int
 def read(add, numbytes):
     global first_line
-    buf = [_READ, add >> 16, (add >> 8) & 0xFF]
+    buf = [_READ, add >> 8, add & 0xFF]
     rec = []
     cspin.value(0)
     spi.write(bytearray(buf[:4]))
