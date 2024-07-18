@@ -140,6 +140,7 @@ def erase(value):
         
 # Store EEPROM to CSV
 # exports 1 page per row
+# Can only save even count of `page_size` values (i.e. 64, 128, 256,...)
 # data = list of data, numbytes = number of bytes to store
 # works
 def ee2csv(data, numbytes):
