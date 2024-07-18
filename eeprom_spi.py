@@ -27,8 +27,8 @@ _WREN = const(6)  # Write enable
 _RDSR = const(5)  # Read status register
 
 # eeprom memory array M95256
-num_pages = 512
-page_size = 64
+num_pages = 256
+page_size = 32
 
 file_name = "dump.csv"
 
@@ -61,7 +61,7 @@ def write_byte(add, dat):
     cspin.value(0)
     spi.write(bytearray(buf[:4]))
     cspin.value(1)
-    print("Send {}".format(buf))
+    #print("Send {}".format(buf))
     time.sleep_ms(5)
 
 # write page to eeprom (or as much databytes as provided)
@@ -135,7 +135,8 @@ def erase(value):
         cspin.value(0)
         spi.write(bytearray(buf))
         cspin.value(1)
-        time.sleep_ms(5)        
+        time.sleep_ms(5)
+    print("EEPROM filled with {}s".format(value))        
         
 # Store EEPROM to CSV
 # exports 1 page per row
@@ -144,14 +145,16 @@ def erase(value):
 def ee2csv(data, numbytes):
     # calculate needed number of pages
     cal_pages = int(numbytes / page_size)
+    cnt = 0
     if numbytes % page_size != 0:
         cal_pages += 1
     print("Writing {} pages to csv".format(cal_pages))
     with open (file_name,"a") as logging:
         for i in range(cal_pages):
             logging.write("{} to {};".format(i*page_size,i*page_size+page_size-1)) 
-            for j in range(page_size): 
-                logging.write("{};".format(data[j]))
+            for j in range(page_size):
+                logging.write("{};".format(data[cnt]))
+                cnt+=1
             logging.write("\n")            
         logging.flush()
     logging.close()    
